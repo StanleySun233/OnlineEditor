@@ -1,2 +1,2 @@
-import loginWindow
-import windowWidget
+import frontend.loginWindow
+import frontend.windowWidget
