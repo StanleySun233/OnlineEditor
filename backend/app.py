@@ -1,6 +1,7 @@
 from flask import Flask, request
 
 import backend
+import config
 import sql
 
 app = Flask(__name__)
@@ -10,25 +11,35 @@ mysqlClient = sql.sqlClient('localhost', '3306', 'oe', 'root', 'root')
 mysqlClient.setConnection()
 
 
-@app.route('/login', methods=['POST', 'GET'])
-def login():
+@app.route('/user/login', methods=['POST', 'GET'])
+def userLogin():
     if request.method == 'POST':
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.login(mysqlClient, data)
+    res = backend.userAuth(mysqlClient, data)
     return res
 
 
-@app.route('/register', methods=['POST', 'GET'])
-def register():
+@app.route('/user/register', methods=['POST', 'GET'])
+def userRegister():
     if request.method == 'POST':
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.register(mysqlClient, data)
+    res = backend.userRegister(mysqlClient, data)
+    return res
+
+
+@app.route('/userInfo/getInfo', methods=['POST', 'GET'])
+def userInfoSearch():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.userInfoGetInfoByAccount(mysqlClient, data)
     return res
 
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', debug=False)
+    app.run(host=config.httpLink, port=config.httpPort, debug=False)
