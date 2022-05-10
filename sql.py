@@ -55,19 +55,27 @@ class sqlClient:
         self.connection.commit()
         fun.logFormat(fun.INFO, "在表 {} 刪除数据 {}".format(table, ids))
 
-    def searchInfo(self, table, attrs=None):
+    def searchInfo(self, table, attrs=None, val=None, mult=False):
         if attrs is None:
             attrs = ''
+        if val is None:
+            val = []
+        sel = ''
+        for i in val:
+            sel += '{},'.format(i)
+        sel = '({})'.format(sel[:-1])
         if len(attrs) == 0:
-            value = 'select * from {}'.format(table)
+            value = 'select {} from {}'.format(sel, table)
         else:
             value = ''
             for i in attrs:
                 value += ('{} = \'{}\' and'.format(i, attrs[i]))
-            value = 'select * from {} where {}'.format(table, value[:-4])
+            value = 'select {} from {} where {}'.format(sel, table, value[:-4])
         cur = self.connection.cursor()
         cur.execute(value)
         res = cur.fetchall()
+        if not mult:
+            res = res[0]
         fun.logFormat(fun.INFO, '在表 {} 查找数据 {}'.format(table, attrs))
         return res
 
