@@ -1,13 +1,13 @@
 from flask import Flask, request
 
+import backend.service as service
 import config
 from tool import sql
-import backend.service as service
 
 app = Flask(__name__)
 
 app.config['JSON_AS_ASCII'] = False
-mysqlClient = sql.sqlClient('localhost', '3306', 'oe', 'root', 'root')
+mysqlClient = sql.sqlClient(config.sqlIp, config.sqlPort, config.sqlDatabase, config.sqlAccount, config.sqlPassword)
 mysqlClient.setConnection()
 
 
