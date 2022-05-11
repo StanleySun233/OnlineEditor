@@ -19,6 +19,7 @@ class LoginWindow(frontend.windowWidget.WindowWidget):
 
         self.accountEntry = self.makeEntry((140, 40, 240, 40))
         self.passwordEntry = self.makeEntry((140, 120, 240, 40))
+        self.passwordEntry.config(show="*")
 
         self.loginButton = self.makeButton((80, 220, 100, 40), '登录', self.loginButtonPress)
         self.registerButton = self.makeButton((220, 220, 100, 40), '注册', self.registerButtonPress)
