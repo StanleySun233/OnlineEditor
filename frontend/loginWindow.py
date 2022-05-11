@@ -5,11 +5,10 @@ import tkinter.messagebox
 import requests
 
 import config
-import frontend.mainWindow as mainWindow
-import frontend.windowWidget as windowWidget
+import frontend.windowWidget
 
 
-class LoginWindow(windowWidget.WindowWidget):
+class LoginWindow(frontend.windowWidget.WindowWidget):
     def __init__(self, width, height, name):
         super().__init__(width, height, name)
         self.loginUrl = '{}/{}'.format(config.httpUrl, 'user/login')
@@ -32,7 +31,7 @@ class LoginWindow(windowWidget.WindowWidget):
             tkinter.messagebox.showinfo('登录', res['msg'])
             name = self.accountEntry.get()
             self.window.destroy()
-            MainWindow = mainWindow.MainWindow(1440, 800, '在线文档编辑系统', name, res['data']['auth'])
+            MainWindow = frontend.mainWindow.MainWindow(1440, 800, '在线文档编辑系统', name, res['data']['auth'])
         else:
             tkinter.messagebox.showwarning('登录', res['msg'])
 

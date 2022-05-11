@@ -1,11 +1,11 @@
 import tkinter as tk
 
-import tool.fun as fun
+import tool
 
 
 class WindowWidget:
     def __init__(self, width, height, name):
-        fun.logFormat(fun.INFO, f'打开{name}')
+        tool.fun.logFormat(tool.fun.INFO, f'打开{name}')
         self.window = tk.Tk()
         self.width = 400
         self.height = 300

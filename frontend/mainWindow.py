@@ -1,12 +1,7 @@
-import frontend.windowWidget as windowWidget
-import requests
-import json
-import tkinter.messagebox
-import config
-import hashlib
+import frontend
 
 
-class MainWindow(windowWidget.WindowWidget):
+class MainWindow(frontend.windowWidget.WindowWidget):
     def __init__(self, width, height, name, user_name, user_auth):
         super().__init__(width, height, name)
         self.name = user_name

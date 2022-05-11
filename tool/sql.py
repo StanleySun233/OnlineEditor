@@ -1,6 +1,6 @@
 import pymysql
 
-from tool import fun
+import tool
 
 
 class sqlClient:
@@ -20,9 +20,9 @@ class sqlClient:
                                               db=self.db,
                                               user=self.user,
                                               password=self.password)
-            fun.logFormat(fun.INFO, '成功连接数据库')
+            tool.fun.logFormat(tool.fun.INFO, '成功连接数据库')
         except:
-            fun.logFormat(fun.WARN, '数据库连接失败')
+            tool.fun.logFormat(tool.fun.WARN, '数据库连接失败')
             exit(0)
 
     def insertInfo(self, table, args):
@@ -46,14 +46,14 @@ class sqlClient:
             sqlString = 'insert into {}{} values {}'.format(table, att, value)
         cur.execute(sqlString)
         self.connection.commit()
-        fun.logFormat(fun.INFO, "在表 {} 插入数据 {}".format(table, value))
+        tool.fun.logFormat(tool.fun.INFO, "在表 {} 插入数据 {}".format(table, value))
 
     def delInfo(self, table, ids):
         value = 'delete from {} where id = {}'.format(table, ids)
         cur = self.connection.cursor()
         cur.execute(value)
         self.connection.commit()
-        fun.logFormat(fun.INFO, "在表 {} 刪除数据 {}".format(table, ids))
+        tool.fun.logFormat(tool.fun.INFO, "在表 {} 刪除数据 {}".format(table, ids))
 
     def searchInfo(self, table, attrs=None, val=None, mult=False):
         if attrs is None:
@@ -76,7 +76,7 @@ class sqlClient:
         res = cur.fetchall()
         if not mult:
             res = res[0]
-        fun.logFormat(fun.INFO, '在表 {} 查找数据 {}'.format(table, attrs))
+        tool.fun.logFormat(tool.fun.INFO, '在表 {} 查找数据 {}'.format(table, attrs))
         return res
 
     def isExist(self, table, attrs=None):
@@ -92,7 +92,7 @@ class sqlClient:
         cur = self.connection.cursor()
         cur.execute(value)
         res = cur.fetchall()
-        fun.logFormat(fun.INFO, '在表 {} 查找数据 {}'.format(table, attrs))
+        tool.fun.logFormat(tool.fun.INFO, '在表 {} 查找数据 {}'.format(table, attrs))
         if len(res) > 0:
             return True
         else:

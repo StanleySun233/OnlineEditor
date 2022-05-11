@@ -3,6 +3,7 @@ import json
 import logging
 import sys
 import time
+
 import cv2
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -32,10 +33,12 @@ def logFormat(l, info):
     :return: None
     """
 
-    if l == 1:
+    if l == 0:
+        level = 'WARN'
+    elif l == 1:
         level = 'INFO'
     elif l == 2:
-        level = 'WARN'
+        level = 'MESSAGE'
     else:
         level = 'MESSAGE'
     """

@@ -1,1 +1,1 @@
-import backend.service.userInfoService as userInfoService
+import backend.service.userInfoService

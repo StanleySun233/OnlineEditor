@@ -1,10 +1,9 @@
 import json
 
-import tool.fun as fun
-import tool.sql as sql
+import tool
 
 
-def login(sqlClient: sql.sqlClient, attrs: dict):
+def login(sqlClient: tool.sql.sqlClient, attrs: dict):
     res = {'code': 0, 'data': None, 'msg': None}
     if 'account' not in attrs.keys():
         res['msg'] = '请求参数没有账号'
@@ -25,7 +24,7 @@ def login(sqlClient: sql.sqlClient, attrs: dict):
     return json.dumps(res, ensure_ascii=False)
 
 
-def register(sqlClient: sql.sqlClient, attrs: dict):
+def register(sqlClient: tool.sql.sqlClient, attrs: dict):
     res = {'code': 0, 'data': None, 'msg': None}
 
     if 'account' not in attrs.keys():
@@ -45,14 +44,14 @@ def register(sqlClient: sql.sqlClient, attrs: dict):
         res['msg'] = '账号已存在'
     else:
         sqlClient.insertInfo('user_info',
-                             {'user_id': fun.getTimeStamp(), 'user_account': account, 'user_password': password})
+                             {'user_id': tool.fun.getTimeStamp(), 'user_account': account, 'user_password': password})
         res['msg'] = '注册成功'
         res['code'] = 1
         res['data'] = {'auth': 0}
     return json.dumps(res, ensure_ascii=False)
 
 
-def getInfoByAccount(sqlClient: sql.sqlClient, attrs: dict):
+def getInfoByAccount(sqlClient: tool.sql.sqlClient, attrs: dict):
     res = {'code': 0, 'data': None, 'msg': None}
     data = sqlClient.isExist('user_info', {'user_account': attrs['account']})
     if data:
