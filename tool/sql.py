@@ -1,6 +1,6 @@
 import pymysql
 
-import fun
+from tool import fun
 
 
 class sqlClient:
