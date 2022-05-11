@@ -45,7 +45,6 @@ class MainWindow(frontend.windowWidget.WindowWidget):
         self.window.mainloop()
 
     def init(self):
-        # TODO
         data = json.loads(requests.post(self.searchByUserNameUrl,
                                         {'user_name': self.name, 'file_type': 'txt'}).
                           content.decode(encoding='utf-8'))['data']
@@ -71,7 +70,6 @@ class MainWindow(frontend.windowWidget.WindowWidget):
         pass
 
     def pictureLabelPress(self, event):
-        # TODO
         path = tk.filedialog.askopenfilename()
         name = os.path.basename(path)
         file_name = os.path.splitext(name)[0]
