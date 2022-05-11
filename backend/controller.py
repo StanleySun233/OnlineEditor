@@ -30,7 +30,7 @@ def userLogin():
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.service.userInfoService.login(mysqlClient, data)
+    res = backend.service.userService.login(mysqlClient, data)
     return res
 
 
@@ -40,29 +40,73 @@ def userRegister():
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.service.userInfoService.register(mysqlClient, data)
+    res = backend.service.userService.register(mysqlClient, data)
     return res
 
 
-@app.route('/userInfo/getInfo', methods=['POST', 'GET'])
-def userInfoSearch():
+@app.route('/user/getInfo', methods=['POST', 'GET'])
+def userSearch():
     if request.method == 'POST':
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.service.userInfoService.getInfoByAccount(mysqlClient, data)
+    res = backend.service.userService.getElemByAccount(mysqlClient, data)
     return res
 
 
-@app.route('/file/upload', method=['GET', 'POST'])
+@app.route('/file/upload', methods=['GET', 'POST'])
 def fileUpload():
     if request.method == 'POST':
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.service.userInfoService.getInfoByAccount(mysqlClient, data)
+    res = backend.service.fileService.upload(minioClient, mysqlClient, data)
     return res
 
 
-if __name__ == "__main__":
+@app.route('/file/download', methods=['GET', 'POST'])
+def fileDownload():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.fileService.download(minioClient, mysqlClient, data)
+    return res
+
+
+@app.route('/file/searchById', methods=['GET', 'POST'])
+def fileSearchById():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.fileService.searchById(mysqlClient, data)
+    return res
+
+
+@app.route('/file/searchByUserName', methods=['GET', 'POST'])
+def fileSearchByUserName():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.fileService.searchByUserName(mysqlClient, data)
+    return res
+
+
+@app.route('/file/update', methods=['GET', 'POST'])
+def fileUpdate():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.fileService.update(minioClient, mysqlClient, data)
+    return res
+
+
+def run():
     app.run(host=config.httpIp, port=config.httpPort, debug=False)
+
+
+if __name__ == "__main__":
+    run()
