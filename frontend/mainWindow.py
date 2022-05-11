@@ -23,7 +23,7 @@ class MainWindow(windowWidget.WindowWidget):
         self.textEditorText = self.makeText((320, 100, 800, 620))
         self.textEditorLabel = self.makeLabel((320, 740, 800, 40), '编辑栏')
 
-        self.makeButton()
+        # self.makeButton()
 
         self.window.mainloop()
 

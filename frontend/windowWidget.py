@@ -1,6 +1,6 @@
 import tkinter as tk
 
-import fun
+import tool.fun as fun
 
 
 class WindowWidget:

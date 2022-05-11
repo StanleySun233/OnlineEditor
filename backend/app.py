@@ -1,8 +1,8 @@
 from flask import Flask, request
 
-import backend
 import config
-import sql
+from tool import sql
+import backend.service as service
 
 app = Flask(__name__)
 
@@ -17,7 +17,7 @@ def userLogin():
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.userAuth(mysqlClient, data)
+    res = service.userInfoService.login(mysqlClient, data)
     return res
 
 
@@ -27,7 +27,7 @@ def userRegister():
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.userRegister(mysqlClient, data)
+    res = service.userInfoService.register(mysqlClient, data)
     return res
 
 
@@ -37,9 +37,9 @@ def userInfoSearch():
         data = request.values.to_dict()
     else:
         data = request.args.to_dict()
-    res = backend.userInfoGetInfoByAccount(mysqlClient, data)
+    res = service.userInfoService.getInfoByAccount(mysqlClient, data)
     return res
 
 
 if __name__ == "__main__":
-    app.run(host=config.httpLink, port=config.httpPort, debug=False)
+    app.run(host=config.httpIp, port=config.httpPort, debug=False)
