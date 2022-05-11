@@ -51,7 +51,7 @@ def register(sqlClient: tool.sql.sqlClient, attrs: dict):
     return json.dumps(res, ensure_ascii=False)
 
 
-def getInfoByAccount(sqlClient: tool.sql.sqlClient, attrs: dict):
+def getElemByAccount(sqlClient: tool.sql.sqlClient, attrs: dict):
     res = {'code': 0, 'data': None, 'msg': None}
     data = sqlClient.isExist('user_info', {'user_account': attrs['account']})
     if data:
