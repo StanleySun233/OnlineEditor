@@ -54,5 +54,15 @@ def userInfoSearch():
     return res
 
 
+@app.route('/file/upload', method=['GET', 'POST'])
+def fileUpload():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.userInfoService.getInfoByAccount(mysqlClient, data)
+    return res
+
+
 if __name__ == "__main__":
     app.run(host=config.httpIp, port=config.httpPort, debug=False)

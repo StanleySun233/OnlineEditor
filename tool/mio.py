@@ -1,3 +1,4 @@
+import io
 import os
 
 import minio
@@ -33,9 +34,11 @@ class minioClient:
             tool.fun.logFormat(tool.fun.WARN, 'MINIO文件管理系统创建桶失败')
             exit(0)
 
-    def uploadFile(self, id, type):
+    def uploadFile(self, id, type, file):
         fileName = f'{id}.{type}'
-        self.connection.fput_object(self.bucket, fileName, f'./{fileName}')
+        l = len(file)
+        f = io.BytesIO(file)
+        self.connection.put_object(self.bucket, fileName, f, l)
 
     def downloadFile(self, fileName):
         filePath = './{}'.format(fileName)
