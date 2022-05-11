@@ -63,20 +63,23 @@ class sqlClient:
         sel = ''
         for i in val:
             sel += '{},'.format(i)
-        sel = '({})'.format(sel[:-1])
+        if len(val):
+            sel = '({})'.format(sel[:-1])
+        else:
+            sel = '*'
         if len(attrs) == 0:
             value = 'select {} from {}'.format(sel, table)
         else:
             value = ''
             for i in attrs:
-                value += ('{} = \'{}\' and'.format(i, attrs[i]))
+                value += ('{} = \'{}\' and '.format(i, attrs[i]))
             value = 'select {} from {} where {}'.format(sel, table, value[:-4])
         cur = self.connection.cursor()
         cur.execute(value)
         res = cur.fetchall()
         if not mult:
             res = res[0]
-        tool.fun.logFormat(tool.fun.INFO, '在表 {} 查找数据 {}'.format(table, attrs))
+        tool.fun.logFormat(tool.fun.INFO, '查询 {}'.format(value))
         return res
 
     def isExist(self, table, attrs=None):
@@ -92,8 +95,25 @@ class sqlClient:
         cur = self.connection.cursor()
         cur.execute(value)
         res = cur.fetchall()
-        tool.fun.logFormat(tool.fun.INFO, '在表 {} 查找数据 {}'.format(table, attrs))
+        tool.fun.logFormat(tool.fun.INFO, '在表 {} 查询 {} 是否存在'.format(table, attrs))
         if len(res) > 0:
             return True
         else:
             return False
+
+    def update(self, table, attrs: dict, val: dict):
+        att = ''
+        for i in attrs:
+            att += '{} = \'{}\' and'.format(i, attrs[i])
+        att = att[:-3]
+
+        valu = ''
+        for i in val:
+            valu += '{} = \'{}\' and'.format(i, val[i])
+        valu = valu[:-3]
+
+        value = 'update {} set {} where {}'.format(table, valu, att)
+        cur = self.connection.cursor()
+        cur.execute(value)
+        self.connection.commit()
+        tool.fun.logFormat(tool.fun.INFO, '修改 {}'.format(value))
