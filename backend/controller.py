@@ -104,6 +104,36 @@ def fileUpdate():
     return res
 
 
+@app.route('/file/delete', methods=['GET', 'POST'])
+def fileDelete():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.fileService.delete(mysqlClient, data)
+    return res
+
+
+@app.route('/file/share', methods=['GET', 'POST'])
+def fileShare():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.fileService.share(minioClient, mysqlClient, data)
+    return res
+
+
+@app.route('/file/online', methods=['GET', 'POST'])
+def fileOnline():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.fileService.online(minioClient, data)
+    return res
+
+
 def run():
     app.run(host=config.httpIp, port=config.httpPort, debug=False)
 

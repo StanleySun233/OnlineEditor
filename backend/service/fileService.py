@@ -1,9 +1,9 @@
 import datetime
-import io
 import json
 
-import minio
+import requests
 
+import config
 import tool
 
 
@@ -63,8 +63,12 @@ def searchById(sqlClient: tool.sql.sqlClient, attrs: dict):
 
 def searchByUserName(sqlClient: tool.sql.sqlClient, attrs: dict):
     res = {'code': 0, 'data': None, 'msg': None}
-    sheet = sqlClient.searchInfo('file_info', {'user_name': attrs['user_name'], 'file_type': attrs['file_type']},
-                                 mult=True)
+    if 'file_type' in [i for i in attrs.keys()]:
+        sheet = sqlClient.searchInfo('file_info', {'user_name': attrs['user_name'], 'file_type': attrs['file_type']},
+                                     mult=True)
+    else:
+        sheet = sqlClient.searchInfo('file_info', {'user_name': attrs['user_name']},
+                                     mult=True)
     result = []
     for i in range(len(sheet)):
         dt = {'file_id': sheet[i][0],
@@ -92,3 +96,73 @@ def update(minioClient: tool.mio.minioClient, mysqlClient: tool.sql.sqlClient, a
     res['code'] = 1
 
     return json.dumps(res)
+
+
+def delete(mysqlClient: tool.sql.sqlClient, attrs: dict):
+    res = {'code': 1, 'data': None, 'msg': None}
+    sheet = mysqlClient.searchInfo('file_info', {'file_id': attrs['file_id']})
+    dt = {'file_id': sheet[0],
+          'file_name': sheet[1],
+          'file_type': sheet[2],
+          'file_auth': sheet[3],
+          'create_date': sheet[4].strftime('%Y-%m-%d %H:%M:%S'),
+          'user_name': sheet[5],
+          'last_date': sheet[6].strftime('%Y-%m-%d %H:%M:%S'),
+          'del_time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+    mysqlClient.delInfo('file_info', {'file_id': attrs['file_id']})
+    mysqlClient.insertInfo('file_info_del', dt)
+    res['msg'] = '删除成功'
+    res['data'] = dt
+
+    return json.dumps(res)
+
+
+def share(minioClient: tool.mio.minioClient, mysqlClient: tool.sql.sqlClient, attrs: dict):
+    usr = mysqlClient.searchInfo('user_info', {'user_account': attrs['user_account']})
+    sheet = mysqlClient.searchInfo('file_info', {'file_id': attrs['file_id']})
+
+    dt = {'file_id': tool.fun.getTimeStamp(),
+          'file_name': sheet[1],
+          'file_type': sheet[2],
+          'file_auth': sheet[3],
+          'create_date': sheet[4].strftime('%Y-%m-%d %H:%M:%S'),
+          'user_name': usr[1],
+          'last_date': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+    url = minioClient.uploadFile(dt['file_id'], dt['file_type'])
+    mysqlClient.insertInfo('file_info', dt)
+
+    mysqlClient.insertInfo('file_share',
+                           {'file_id': attrs['file_id'], 'file_to': attrs['user_account'], 'file_from': sheet[5]
+                               , 'file_new': dt['file_id'], 'share_date': dt['last_date']})
+
+    return json.dumps({'code': 1, 'data': {'url': url, 'info': dt}, 'msg': '分享成功'})
+
+
+def online(minioClient: tool.mio.minioClient, attrs: dict):
+    key = [i for i in attrs.keys()]
+    if 'id' in key:
+        url = minioClient.downloadFile(attrs['id'], attrs['type'])
+        if attrs['type'] != 'txt':
+            f = open('backend/service/sample/online.html', 'r', encoding='utf-8')
+            ht = f.read()
+            f.close()
+            ht = ht.format('下载链接', "<div><a href=\"{}\">文件下载</a></div>".format(url))
+            return ht
+        else:
+            f = open('backend/service/sample/online.html', 'r', encoding='utf-8')
+            ht = f.read()
+            f.close()
+
+            text = requests.get(url).content.decode(encoding='utf-8').split('\n')
+            t = ['<p>{}<p>\n'.format(i) for i in text]
+            ts = ''
+            for i in t:
+                ts += i
+            ht = ht.format('文本读取器', ts)
+            return ht
+    elif 'file_id' in key:
+        return json.dumps(
+            {'msg': '分享成功',
+             'data': {
+                 'url': '{}/file/online?id={}&type={}'.format(config.httpUrl, attrs['file_id'], attrs['file_type'])}})

@@ -48,12 +48,13 @@ class sqlClient:
         self.connection.commit()
         tool.fun.logFormat(tool.fun.INFO, "在表 {} 插入数据 {}".format(table, value))
 
-    def delInfo(self, table, ids):
-        value = 'delete from {} where id = {}'.format(table, ids)
+    def delInfo(self, table, attrs: dict):
+        value = 'delete from {} where {} = \'{}\''.format(table, [i for i in attrs.keys()][0],
+                                                          attrs[[i for i in attrs.keys()][0]])
         cur = self.connection.cursor()
         cur.execute(value)
         self.connection.commit()
-        tool.fun.logFormat(tool.fun.INFO, "在表 {} 刪除数据 {}".format(table, ids))
+        tool.fun.logFormat(tool.fun.INFO, "在表 {} 刪除数据 {}".format(table, attrs))
 
     def searchInfo(self, table, attrs=None, val=None, mult=False):
         if attrs is None:
