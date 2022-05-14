@@ -97,7 +97,7 @@
 
 在线文档的C端主要有两种方案：web端和客户端。阿里、腾讯和石墨主要才用的是前者的方案，编辑和查看都在网页端实现；而金山主要采用的是客户端的方案，用户需要下载安装WPS或者金山文档才能进行浏览。
 
-对于文本的保存，以阿里巴巴的石墨和金山文档的WSP为两种主流方案：md格式和doc格式。md格式方便有经验的用户对格式进行快速编排，而doc格式更适合大部分用户使用。
+对于文本的保存，以阿里巴巴的石墨和金山文档的WPS为两种主流方案：markdown格式(以下简称为md)和word格式。md格式方便有经验的用户对格式进行快速编排，而word格式更适合大部分用户使用。
 
 同时，国外也有类似于OverLeaf这种LaTeX在线文档编辑的方案，它的服务对象主要以学术论文的编写为主。这种文档共享的方式，需要一个强大的编译器后端，对于不同文件编码格式都有不同的需求，在兼容性方向需要一个极其强大的算法来进行匹配和运算。不过，由于LaTeX提供了丰富的第三方共享平台，对于有一定使用基础的用户来说，可以大大减少用户在论文格式排版上面的耗时。
 
@@ -202,22 +202,39 @@
 
 文档共享子系统提供分享和共享的功能，是本系统设计的关键，如图\ref{fig:5}所示。用户选择文件以后，在共享id框输入域需要被共享的用户，点击共享按钮以后即可共享，可以查看和编辑；而分享则是创建一个web的html网页，将网页分享以http协议分享给其他用户，只能查看，不可编辑。
 
-\chapter{在线文本共享编辑系统的数据库设计}
+\chapter{在线编辑系统的数据库设计}
 
 \section{本系统的数据库概念设计}
 
-本系统数据库的概念E-R模型如图4-1所示，共涉及到三个表。
+本系统数据库的概念E-R模型如图\ref{fig:6}所示，共涉及到三个表。
 
 \begin{figure}[!htbp]
 	\centering
 	\includegraphics[height=0.2\textheight]{pic6.png}
 	\caption{数据库E-R图}
-	\label{fig:1}
+	\label{fig:6}
 \end{figure}
 
 \section{本系统的数据库表设计}
 
-\chapter{在线文本共享编辑系统的设计和实现}
+本数据库如图\ref{fig:7}所示。
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[height=0.2\textheight]{pic7.png}
+	\caption{数据库设计图}
+	\label{fig:7}
+\end{figure}
+
+file\_info和user\_info是两个基础信息表。前者记录了文件的保存信息和基础数据，使用id作为表的主键；后者记录的是用户的信息和权限，也使用id作为表的主键。
+
+file\_share和file\_info\_del是文件分享表和文件删除表。文件分享表记录了用户分享文件的信息；文件删除表记录了用户逻辑删除的文件信息。
+
+file\_share中，file\_new是主键，他是分享后新生成的文件信息，同时也是file\_id的外键。
+
+
+
+\chapter{在线编辑系统的设计和实现}
 
 本系统使用Mysql作为数据库管理系统。考虑到系统的安全性，网络环境采用星型局域网结构\upcite{r3}。
 
@@ -233,14 +250,45 @@
 
 Docker提供了一种虚拟容器技术，在目前的互联网时代被广泛使用，Docker将对象资源封装在容器内，直接使用宿主机的环境来运行镜像封装。Docker实现了虚拟机和实体机的沙箱隔离，所有的通信端口必须在用户配置镜像时预设好，虽然在一定程度上减少了程序的可调性，但是提供了更高的隔离级别，更适合用于高需求下的用户配置环境。
 
+本项目中的minio服务端部署在服务器上，使用docker进行构建和管理。命令如下：
+
+\begin{lstlisting}
+docker search minio
+docker pull minio/minio
+
+docker run -d -p 9000:9000 -p 9090:9090 --name=minio --restart=always -e "MINIO_ROOT_USER=admin" -e "MINIO_ROOT_PASSWORD=admin123456" -v /home/data:/data -v /home/config:/root/.minio  minio/minio server /data --console-address ":9000" --address ":9090"
+\end{lstlisting}
+
+其中，`-p 9000:9000 -p 9090:9090` 表示开放端口。
+
+--console-address ":9000" --address ":9090"
+
+此处也需要修改为和上文一样，9000是docker容器对服务器端口，9090是管理console端口（API端口）。
+
+--name 设置容器名字。
+
+MINIO\_ROOT\_USER 后接管理员账号。
+
+MINIO\_ROOT\_PASSWORD`后接管理员密码。
+
+-v /home/data:/data -v /home/config:/root/.minio 是挂载文件的位置。
+
 \section{本系统的总体程序控制流程}
 
 用户在登录或者注册以后，可在平台上完成个人的文档分享和获取的需求,实现办公、交互资源的共享。通过上传或者下载，与文件进行流处理、通过分享或者共享、与其他用户协作共享。
 
 \section{登录系统的设计和实现}
 
-如图5-1所示，登录系统的交互界面包含了两个按钮：登录、注册和两个文本框：账号、密码。
+\subsection{登录系统的前端设计}
 
+如图\ref{fig:8}所示，登录系统的交互界面包含了两个按钮：登录、注册和两个文本框：账号、密码。
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[height=0.2\textheight]{pic8.png}
+	\caption{登录界面前端}
+	\label{fig:8}
+\end{figure}
 
 登录界面实现了登录和注册两个功能。
 
@@ -250,9 +298,41 @@ Docker提供了一种虚拟容器技术，在目前的互联网时代被广泛�
 
 注册功能同样提取了用户输入的账号和密码，查询数据库，如果不存在该账号，提示注册成功，否则提示注册失败。
 
+\subsection{登录系统的后端设计}
+
+登录系统的后端定义了2个接口功能。
+
+\begin{lstlisting}
+def login(sqlClient: tool.sql.sqlClient, attrs: dict)
+def register(sqlClient: tool.sql.sqlClient, attrs: dict)
+\end{lstlisting}
+
+\textbf{login接口的请求地址是：}
+\begin{equation*}
+	user/login
+\end{equation*}
+
+该接口可以使用POST协议接收json报文，解析为dict格式，传入参数为account和password。后端接收到数据以后，接入数据库进行搜索，如果匹配到相应的账号和密码，那么将返回用户的权限，即auth，反之，将返回code=0，前端即可知道是否应该让用户登录。
+
+\textbf{register接口的请求地址是：}
+\begin{equation*}
+	user/register
+\end{equation*}
+
+该接口可以使用POST协议接收json报文，解析为dict格式，传入参数为account和password。后端接收到数据以后，接入数据库进行搜索，如果检索到账户已存在，那么将返回code=2，表示账户已存在，如果检索不到该账户，那么返回code=1，前端完成用户注册提示，后端将该用户的数据写入数据库中。
+
 \section{文本编辑系统主界面的设计和实现}
 
-文本编辑系统的主界面用户交互设计如图5-2所示，左侧包括了选择文件功能，中间是文本编辑功能，右侧是文件管理系统。
+\subsection{文本编辑系统的前端设计}
+
+文本编辑系统的主界面用户交互设计如图\ref{fig:9}所示，左侧包括了选择文件功能，中间是文本编辑功能，右侧是文件管理系统。
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[height=0.2\textheight]{pic9.png}
+	\caption{文本编辑系统前端}
+	\label{fig:9}
+\end{figure}
 
 左侧的文件信息表为登录用户提供了文本选择的功能。用户登录以后，系统会自动查询数据库，检索用户当前存有的文件，并且显示在选择文件的框中。
 
@@ -260,20 +340,55 @@ Docker提供了一种虚拟容器技术，在目前的互联网时代被广泛�
 
 文档的定位主要基于用户鼠标点击的坐标，进行计算。通过获取用户按下按钮的x，y坐标位置信息，通过公式5-1可以计算出查询文件在该用户的文件Index是多少，然后查询数据的位次，最终查询该文本的地址信息，返回该文本数据。
 
-公式5-1的含义是：event.y储存了鼠标点击文件表的y轴坐标，通过对y轴坐标除以20，向下取整的方式获取到Index的值，匹配到文件表的文件id，再通过文件id去查找数据库，最终获取到文本。
+\begin{equation}
+	Index = event.y // 20
+\end{equation}
 
+公式5-1的含义是：event.y储存了鼠标点击文件表的y轴坐标，通过对y轴坐标除以20，向下取整的方式获取到Index的值，匹配到文件表的文件id，再通过文件id去查找数据库，最终获取到文本。在python中，除以并且向下取整的符号是$//$。
 
 用户点击文档时，首先会调用数据库，查询该文档的权限，如果权限返回值为1，那么表示可以编辑，如果返回值是0，表示有人正在编辑，用户暂时无法编辑该文档。
 
-若用户成功打开文档以后，会向数据库发送一个修改$file_auth$和$last_date$值的命令，将该文本的这个值置为0，并且把最后修改日期设置为当前时间，表示文档此时处于该用户的可编辑状态，而其他用户无法访问，为了减少用户由于遗忘， 忘记关闭编辑功能导致文档长期被占用，如果用户在2分钟内不进行保存操作，那么文件权限将会释放，其他用户可以打开并编辑。
+若用户成功打开文档以后，会向数据库发送一个修改file\_auth和last\_date值的命令，将该文本的这个值置为0，并且把最后修改日期设置为当前时间，表示文档此时处于该用户的可编辑状态，而其他用户无法访问，为了减少用户由于遗忘， 忘记关闭编辑功能导致文档长期被占用，如果用户在2分钟内不进行保存操作，那么文件权限将会释放，其他用户可以打开并编辑。
 
-编辑文档是本系统最重要的功能。以打开yt-dlp这个文件为例，文本编辑框显示如图5-3，随意修改一些文本以后，改为图5-4，这时候，点击保存按钮将最新的文本上传到文件管理服务器，并且将数据库中的最新更新日期更新到当前时间。
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[height=0.15\textheight]{pic10.png}
+	\caption{读取文本信息}
+	\label{fig:10}
+\end{figure}
 
-这时，登录另一个被共享该文档的账号，打开改文本，即可显示文档内容被成功修改为如图5-3的值。
+编辑文档是本系统最重要的功能。以打开测试文本这个文件为例，文本编辑框显示如图\ref{fig:10}，随意修改一些文本以后，这时候，点击保存按钮将最新的文本上传到文件管理服务器，并且将数据库中的最新更新日期更新到当前时间，数据库的数据如图\ref{fig:11}所示。
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[height=0.05\textheight]{pic11.png}
+	\caption{数据库信息}
+	\label{fig:11}
+\end{figure}
+
+这时，登录另一个被共享该文档的账号，打开改文本，即可显示文档内容被成功修改为如图\ref{fig:10}的值。
 
 文本保存的方法是对文本二进制的读写。首先读取文本编辑器的内容，在本地创建一个temp的文件，将文本写入该文档。为了确保文件解码的统一性，避免程序出错，文本的保存和读取都以utf-8进行，确保中文文本可以被成功解码。在文件写入缓存以后，调用minio的接口，获取上传链接，将二进制的文本数据使用http协议的put方法上传，最后更新数据库信息，把文件编辑权限置为1，最后更新日期传入当前时间节点。
 
+\subsection{文本编辑系统的后端设计}
+
+文本编辑系统的后端定义了1个接口功能。
+
+\begin{lstlisting}
+def update(minioClient: tool.mio.minioClient, mysqlClient: tool.sql.sqlClient, attrs: dict)
+\end{lstlisting}
+
+\textbf{update接口的请求地址是：}
+\begin{equation*}
+	file/update
+\end{equation*}
+
+使用POST协议接收json报文，解析为dict格式，传入参数为文件id。后端接收到数据以后，调用minio获取上传url地址，并且更新最新的数据库。前端接收到上传文件地址时，将文本编译为二进制流，使用PUT方法传入minio中。
+
+
 \section{文档共享的设计和实现}
+
+\subsection{文本共享的设计}
 
 文档共享的功能是将用户A的某个文档a共享给用户B，共享成功后用户B的文档列表中也会出现文档a。
 
@@ -283,15 +398,62 @@ Docker提供了一种虚拟容器技术，在目前的互联网时代被广泛�
 
 用户也可以自行下载自己上传、修改、被共享的文档。与上传类似，文档的上传和下载主要基于http协议，通过python封装好的http协议调用，可以方便的使用minio的功能，用户首先选择一个保存目录，由于用户在打开文档时已经检查过对于该文档的权限，所以无需在此检查用户的权限。通过调用minio的下载接口，使用http协议的get方法获取文件信息，将文件保存在本地目录中。
 
+\subsection{文本共享的后端设计}
+
+文本共享的后端定义了3个接口功能。
+
+\begin{lstlisting}
+def upload(minioClient: tool.mio.minioClient, mysqlClient: tool.sql.sqlClient, attrs: dict)
+def download(minioClient: tool.mio.minioClient, mysqlClient: tool.sql.sqlClient, attrs: dict)
+def share(minioClient: tool.mio.minioClient, mysqlClient: tool.sql.sqlClient, attrs: dict)
+\end{lstlisting}
+
+\textbf{upload接口的请求地址是：}
+\begin{equation*}
+	file/upload
+\end{equation*}
+
+upload方法通过调用minio服务器，返回一个上传接口，使用put方法上传文件二进制流。
+
+\textbf{download接口的请求地址是：}
+\begin{equation*}
+	file/download
+\end{equation*}
+
+download方法通过调用minio服务器，返回一个下载接口，使用get方法获取文件二进制流，保存到指定位置。
+
+\textbf{share接口的请求地址是：}
+\begin{equation*}
+	file/share
+\end{equation*}
+
+share方法通过调用数据库，复制一份源文件，设置为新用户的一分新增文件。
+
 \section{文档分享的设计和实现}
 
 文档分享的功能是将用户A的某个文档a分享在互联网上。其他包括未使用该系统的用户点击这个链接，就可以直接跳转到网页上浏览这个文本的所有内容，但是不能对文本进行修改，即只有只读权限。
 
-文档分享功能也是在线文档共享编辑系统不可缺少的一部分。用户在上传或者完成编辑以后，可以自行选择对文件进行共享和分享，如图所示，文本被展示在浏览器上。
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[height=0.2\textheight]{pic12.png}
+	\caption{web前端解析文本信息}
+	\label{fig:12}
+\end{figure}
 
-文档分享功能的实现主要基于ftp协议。该功能通过ftp协议上传到服务器的存储空间上，实现了对于非使用者，即使不需要安装客户端也可以通过网络访问共享文档。用户在选择文档以后，按下分享按钮，程序即连接ftp服务器，本地客户端将文档内容编码为html格式，上传到ftp服务器，网页最终将其渲染为文本，展示给被分享者。
+文档分享功能也是在线文档共享编辑系统不可缺少的一部分。用户在上传或者完成编辑以后，可以自行选择对文件进行共享和分享，如图\ref{fig:12}所示，文本被展示在浏览器上。
+
+文档分享功能的实现主要基于flask协议传输html文本，将文档内容编码为html格式，网页最终将其渲染为文本，展示给被分享者。
 
 文本共享是基于客户端内的编辑和使用，只能分享给使用客户端的用户。用户输入需要被共享的对象以后，客户端发送数据对数据库进行检索，如果被分享用户是自己，那么弹出提示，如果成功共享，那么会给数据库发送一个增加用户访问的指令，无异常则提示共享成功。
+
+对于图片等非文本文件，将显示一个下载链接提供下载，如图\ref{fig:13}所示。
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[height=0.2\textheight]{pic13.png}
+	\caption{web前端解析非文本信息}
+	\label{fig:13}
+\end{figure}
 
 \chapter{结语}
 
@@ -302,6 +464,10 @@ Docker提供了一种虚拟容器技术，在目前的互联网时代被广泛�
 考虑不到文档共享和编辑必须建立在安全、可靠、快速的基础上。在设计开发文档共享系统，使用加密方法保存了密码信息，确保信息安全，即必须要掌握对信息可靠性的把控，权限的把握尤为关键。安全是文档编辑的基础要求，电子数据在网络上非常容易被复制和传播，必须要对非共享人员设计一个保密级别高的权限，减少人为的数据反编译产生的损失。
 
 综上所述，本系统融合了互联网发展下的数据时代，对文档编辑系统展开研究和设计，最终建立起一套有体系的在线文档共享编辑系统。信息化的建设是一个慢长的过程，一次次的技术突破往往带来的是新时代的风向。
+
+文档是一种拥有社会化属性的现代化元素,它在企业中是最有效的信息交换媒介。现如今,企业员工在进行文档相关工作时主要包含频繁更新内容、团队协作共同完成、紧密联系企业工作流、随时随地的浏览编辑以及标记等特点。在线文档编辑系统为团队提供了一个能够共同编辑和浏览文档的较好的方式,它能够独立的创建文字处理、表格以及演示文档。
+
+依照在线表格编辑系统特点以及软件工程的思想,开发了多个紧密相连的模块。对于每个功能模块,均需要完成客户端和服务器端的设计。服务器端主要实现数据统一性、完整性和准确性,客户端主要实现前端和客户的交互行为。
 
 \clearpage
 %%%=== 参考文献 ========%%%
@@ -319,46 +485,21 @@ Docker提供了一种虚拟容器技术，在目前的互联网时代被广泛�
   
 \end{thebibliography}
 
-%\include{includefile/backmatter} %%%致谢
+\include{includefile/backmatter} %%%致谢
 \clearpage
 %%%-------------- 附录. 不需要可以删除.-----------
 \appendix
 
+\chapter{事项}
 
-\chapter{代码}
+本文的报告撰写使用 LaTeX 完成。
 
-\section{客户端}
+本程序已经开源在Github，地址为：
 
-\begin{lstlisting}
-import os
-import socket
-import tkinter
-import tkinter.messagebox
-import threading
-import json
-import tkinter.filedialog
-from tkinter.scrolledtext import ScrolledText
-import demo.neo4j.Neo_Fun as NeoFun
-import cv2
-import numpy as np
-import ftplib
-\end{lstlisting}
+\begin{equation*}
+	https://github.com/StanleySun233/OnlineEditor
+\end{equation*}
 
-\section{客户端}
-\begin{lstlisting}
-import os
-import socket
-import tkinter
-import tkinter.messagebox
-import threading
-import json
-import tkinter.filedialog
-from tkinter.scrolledtext import ScrolledText
-import demo.neo4j.Neo_Fun as NeoFun
-import cv2
-import numpy as np
-import ftplib
-\end{lstlisting}
 \end{document}
 
 

@@ -14,18 +14,23 @@
 \contentsline {section}{\numberline {3.3}文档编辑子系统的功能}{6}{section.3.3}%
 \contentsline {section}{\numberline {3.4}文档管理子系统的功能}{6}{section.3.4}%
 \contentsline {section}{\numberline {3.5}文档分享子系统的功能}{7}{section.3.5}%
-\contentsline {chapter}{\numberline {\zihao {-2}4\hspace {.3em}}在线文本共享编辑系统的数据库设计}{8}{chapter.4}%
+\contentsline {chapter}{\numberline {\zihao {-2}4\hspace {.3em}}在线编辑系统的数据库设计}{8}{chapter.4}%
 \contentsline {section}{\numberline {4.1}本系统的数据库概念设计}{8}{section.4.1}%
 \contentsline {section}{\numberline {4.2}本系统的数据库表设计}{8}{section.4.2}%
-\contentsline {chapter}{\numberline {\zihao {-2}5\hspace {.3em}}在线文本共享编辑系统的设计和实现}{9}{chapter.5}%
-\contentsline {section}{\numberline {5.1}环境配置}{9}{section.5.1}%
-\contentsline {section}{\numberline {5.2}本系统的总体程序控制流程}{9}{section.5.2}%
-\contentsline {section}{\numberline {5.3}登录系统的设计和实现}{9}{section.5.3}%
-\contentsline {section}{\numberline {5.4}文本编辑系统主界面的设计和实现}{10}{section.5.4}%
-\contentsline {section}{\numberline {5.5}文档共享的设计和实现}{11}{section.5.5}%
-\contentsline {section}{\numberline {5.6}文档分享的设计和实现}{11}{section.5.6}%
-\contentsline {chapter}{\numberline {\zihao {-2}6\hspace {.3em}}结语}{13}{chapter.6}%
-\contentsline {chapter}{参考文献}{14}{section*.9}%
-\contentsline {chapter}{\numberline {附录 A\hspace {.3em}}代码}{15}{appendix.A}%
-\contentsline {section}{\numberline {A.1}客户端}{15}{section.A.1}%
-\contentsline {section}{\numberline {A.2}客户端}{15}{section.A.2}%
+\contentsline {chapter}{\numberline {\zihao {-2}5\hspace {.3em}}在线编辑系统的设计和实现}{10}{chapter.5}%
+\contentsline {section}{\numberline {5.1}环境配置}{10}{section.5.1}%
+\contentsline {section}{\numberline {5.2}本系统的总体程序控制流程}{11}{section.5.2}%
+\contentsline {section}{\numberline {5.3}登录系统的设计和实现}{11}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}登录系统的前端设计}{11}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}登录系统的后端设计}{12}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}文本编辑系统主界面的设计和实现}{12}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}文本编辑系统的前端设计}{12}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}文本编辑系统的后端设计}{14}{subsection.5.4.2}%
+\contentsline {section}{\numberline {5.5}文档共享的设计和实现}{14}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}文本共享的设计}{14}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.2}文本共享的后端设计}{15}{subsection.5.5.2}%
+\contentsline {section}{\numberline {5.6}文档分享的设计和实现}{15}{section.5.6}%
+\contentsline {chapter}{\numberline {\zihao {-2}6\hspace {.3em}}结语}{17}{chapter.6}%
+\contentsline {chapter}{参考文献}{18}{section*.16}%
+\contentsline {chapter}{致谢}{19}{chapter*.18}%
+\contentsline {chapter}{\numberline {附录 A\hspace {.3em}}事项}{20}{appendix.A}%

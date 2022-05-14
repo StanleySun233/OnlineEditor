@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2022.1.4)  13 MAY 2022 02:01
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2022.1.4)  15 MAY 2022 01:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -750,10 +750,7 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 
 LaTeX Warning: Label `fig:1' multiply defined.
 
-
-LaTeX Warning: Label `fig:1' multiply defined.
-
-)
+(./includefile/backmatter.aux))
 \openout1 = `software.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
@@ -1025,21 +1022,57 @@ File: figures//pic5.png Graphic file (type bmp)
 \zihao {-2}4
 File: figures//pic6.png Graphic file (type bmp)
 <figures//pic6.png>
+File: figures//pic7.png Graphic file (type bmp)
+<figures//pic7.png>
 [8
 
-]
+] [9]
 \zihao {-2}5
 
-LaTeX Warning: Citation `5' on page 9 undefined on input line 247.
+Package fontspec Warning: Font "FandolFang-Regular" does not contain requested
+(fontspec)                Script "CJK".
 
-[9
 
-] [10] [11] [12]
-\zihao {-2}6
-[13
+Package fontspec Info: Font family 'FandolFang-Regular(0)' created for font
+(fontspec)             'FandolFang-Regular' with options
+(fontspec)             [Script={CJK},Extension={.otf}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"[FandolFang-Regular.otf]/OT:language=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+
+[10
 
 ]
-Underfull \hbox (badness 6927) in paragraph at lines 313--314
+File: figures//pic8.png Graphic file (type bmp)
+<figures//pic8.png>
+
+
+LaTeX Warning: Citation `5' on page 11 undefined on input line 295.
+
+[11]
+File: figures//pic9.png Graphic file (type bmp)
+<figures//pic9.png>
+ [12]
+File: figures//pic10.png Graphic file (type bmp)
+<figures//pic10.png>
+File: figures//pic11.png Graphic file (type bmp)
+<figures//pic11.png>
+ [13] [14]
+File: figures//pic12.png Graphic file (type bmp)
+<figures//pic12.png>
+ [15]
+File: figures//pic13.png Graphic file (type bmp)
+<figures//pic13.png>
+ [16]
+\zihao {-2}6
+[17
+
+]
+Underfull \hbox (badness 6927) in paragraph at lines 479--480
 []\TU/FandolSong-Regular(0)/m/n/12.045 李 翔\TU/TimesNewRoman(0)/m/n/12.045 . \TU
 /FandolSong-Regular(0)/m/n/12.045 基 于 \TU/TimesNewRoman(0)/m/n/12.045 B/S \TU/F
 andolSong-Regular(0)/m/n/12.045 的 高 校 学 生 收 费 系 统 设 计 \TU/TimesNewRoman(0)/m/n/
@@ -1047,7 +1080,7 @@ andolSong-Regular(0)/m/n/12.045 的 高 校 学 生 收 费 系 统 设 计 \TU/
  []
 
 
-Underfull \hbox (badness 2875) in paragraph at lines 314--315
+Underfull \hbox (badness 2875) in paragraph at lines 480--481
 []\TU/FandolSong-Regular(0)/m/n/12.045 屈 武 江\TU/TimesNewRoman(0)/m/n/12.045 , \
 TU/FandolSong-Regular(0)/m/n/12.045 霍 艳 飞\TU/TimesNewRoman(0)/m/n/12.045 . \TU/
 FandolSong-Regular(0)/m/n/12.045 供 热 收 费 管 理 系 统 的 设 计 与 实 现 \TU/TimesNewRoman(
@@ -1055,15 +1088,21 @@ FandolSong-Regular(0)/m/n/12.045 供 热 收 费 管 理 系 统 的 设 计 与
  []
 
 
-Underfull \hbox (badness 5519) in paragraph at lines 318--319
+Underfull \hbox (badness 5519) in paragraph at lines 484--485
 []\TU/FandolSong-Regular(0)/m/n/12.045 周 奇 慧\TU/TimesNewRoman(0)/m/n/12.045 . \
 TU/FandolSong-Regular(0)/m/n/12.045 企 业 信 息 管 理 系 统 建 设 与 维 护 研 究 \TU/TimesNewR
 oman(0)/m/n/12.045 [J]. \TU/FandolSong-Regular(0)/m/n/12.045 信 息 与 电 脑 \TU/Time
 sNewRoman(0)/m/n/12.045 (\TU/FandolSong-Regular(0)/m/n/12.045 理 论
  []
 
-[14
+[18
 
+
+
+]
+\openout2 = `includefile/backmatter.aux'.
+
+ (./includefile/backmatter.tex) [19
 
 
 ]
@@ -1071,32 +1110,29 @@ sNewRoman(0)/m/n/12.045 (\TU/FandolSong-Regular(0)/m/n/12.045 理 论
 \tf@thm=\write5
 \openout5 = `software.thm'.
 
-[15
+[20
 
 
-] (./software.aux (./includefile/frontmatter.aux))
+
+
+] (./software.aux (./includefile/frontmatter.aux)
+(./includefile/backmatter.aux))
 
 LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-
-Package rerunfilecheck Warning: File `software.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `software.out':
-(rerunfilecheck)             Before: BB65ED67367279FC349EE05845AEF527;3318
-(rerunfilecheck)             After:  BDF86211525C69B4D15C2445AB98B736;3648.
+Package rerunfilecheck Info: File `software.out' has not changed.
+(rerunfilecheck)             Checksum: 63E0CEBAA6C0D3198AD08F5EBE067239;4307.
  ) 
 Here is how much of TeX's memory you used:
- 19571 strings out of 476919
- 401328 string characters out of 5820945
- 1000048 words of memory out of 5000000
- 39220 multiletter control sequences out of 15000+600000
- 416608 words of font info for 130 fonts, out of 8000000 for 9000
+ 19690 strings out of 476919
+ 405287 string characters out of 5820945
+ 986048 words of memory out of 5000000
+ 39320 multiletter control sequences out of 15000+600000
+ 416640 words of font info for 134 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 115i,12n,118p,1199b,746s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 115i,12n,118p,1199b,1081s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on software.pdf (21 pages).
+Output written on software.pdf (26 pages).
