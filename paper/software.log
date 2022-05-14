@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2022.1.4)  15 MAY 2022 01:45
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2022.1.4)  15 MAY 2022 01:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1124,7 +1124,7 @@ LaTeX Warning: There were undefined references.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `software.out' has not changed.
-(rerunfilecheck)             Checksum: 63E0CEBAA6C0D3198AD08F5EBE067239;4307.
+(rerunfilecheck)             Checksum: 2B675AC6CF7CB0FAE2AB4C918FB70595;4307.
  ) 
 Here is how much of TeX's memory you used:
  19690 strings out of 476919

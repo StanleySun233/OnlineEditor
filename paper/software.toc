@@ -8,7 +8,7 @@
 \contentsline {section}{\numberline {2.1}当前不足}{3}{section.2.1}%
 \contentsline {subsection}{\numberline {2.1.1}本系统的用户需求}{3}{subsection.2.1.1}%
 \contentsline {subsection}{\numberline {2.1.2}本系统实现需要实现的功能}{3}{subsection.2.1.2}%
-\contentsline {chapter}{\numberline {\zihao {-2}3\hspace {.3em}}在线文件编辑系统的需求分析}{5}{chapter.3}%
+\contentsline {chapter}{\numberline {\zihao {-2}3\hspace {.3em}}在线文件编辑系统的功能设计}{5}{chapter.3}%
 \contentsline {section}{\numberline {3.1}本系统的功能结构}{5}{section.3.1}%
 \contentsline {section}{\numberline {3.2}登录子系统的功能}{5}{section.3.2}%
 \contentsline {section}{\numberline {3.3}文档编辑子系统的功能}{6}{section.3.3}%

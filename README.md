@@ -1,6 +1,6 @@
 # OnlineEditor
 
-关键词：前后端分离、Flask、数据库、Tkinter、课程设计 在线文档共享编辑系统
+关键词：前后端分离、Flask、数据库、Tkinter、课程设计 在线文档共享编辑系统。
 
 # 0. 需求
 
