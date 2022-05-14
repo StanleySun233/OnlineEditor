@@ -213,7 +213,7 @@ class MainWindow(frontend.windowWidget.WindowWidget):
     def onlineFileButtonPress(self, *args):
         res = json.loads(
             requests.post(self.onlineUrl, {'file_id': self.ids, 'file_type': self.type}).content.decode('utf-8'))
-        self.shareFileEntry.delete(0)
+        self.shareFileEntry.setvar('')
         self.shareFileEntry.insert(0, res['data']['url'])
         tk.messagebox.showinfo('分享', '文件分享成功')
         pass

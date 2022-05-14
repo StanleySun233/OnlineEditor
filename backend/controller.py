@@ -134,6 +134,26 @@ def fileOnline():
     return res
 
 
+@app.route('/admin/userInfo', methods=['GET', 'POST'])
+def adminUserInfo():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.adminService.userInfo(mysqlClient, data)
+    return res
+
+
+@app.route('/admin/userFileInfo', methods=['GET', 'POST'])
+def adminUserFileInfo():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.adminService.userFileInfo(mysqlClient, data)
+    return res
+
+
 def run():
     app.run(host=config.httpIp, port=config.httpPort, debug=False)
 
