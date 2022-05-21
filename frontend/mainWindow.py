@@ -15,9 +15,11 @@ import tool.fun
 class MainWindow(frontend.windowWidget.WindowWidget):
     def __init__(self, width, height, name, user_name, user_auth):
         super().__init__(width, height, name)
+        self.showType = ['txt', 'md', 'html', 'sql']
         self.type = None
         self.picture = None
         self.data = None
+        self.v1 = tk.StringVar()
         self.name = user_name
         self.auth = user_auth
         self.authDict = {0: '用户', 1: '会员', 5: '管理员'}
@@ -37,6 +39,8 @@ class MainWindow(frontend.windowWidget.WindowWidget):
 
         self.fileListbox = self.makeListbox((40, 180, 260, 540), self.fileListboxPress)
         self.fileListboxLabel = self.makeLabel((40, 740, 260, 40), '文件栏')
+
+        self.textEditorFileId = self.makeLabel((320, 40, 800, 40))
 
         self.textEditorText = self.makeText((320, 100, 800, 620))
         self.textEditorLabel = self.makeLabel((320, 740, 800, 40), '编辑栏')
@@ -75,11 +79,11 @@ class MainWindow(frontend.windowWidget.WindowWidget):
         idx = self.fileListbox.curselection()
         if len(idx):
             idx = idx[0]
-        print(self.data)
         self.ids = self.data[idx]['file_id']
         self.type = self.data[idx]['file_type']
         self.textEditorText.delete('1.0', tk.END)
-        if self.type not in ['txt', 'md', 'html']:
+        self.textEditorFileId.configure(text=str(self.ids))
+        if self.type not in self.showType:
             self.textEditorText.insert('end', '非二进制文本文件无法查看，但是可以共享和分享。')
             return
         self.loadData()
@@ -100,7 +104,7 @@ class MainWindow(frontend.windowWidget.WindowWidget):
         os.remove('./temp.png')
         file_auth = self.auth
         user_name = self.name
-        data = {'file_name': file_name, 'file_type': file_type, 'file_auth': file_auth,
+        data = {'file_name': file_name, 'file_type': 'png', 'file_auth': file_auth,
                 'user_name': user_name}
         url = json.loads(requests.post(self.uploadUrl, data=data).content.decode('utf-8'))['data']['url']
         res = requests.put(url, file)
@@ -213,7 +217,8 @@ class MainWindow(frontend.windowWidget.WindowWidget):
     def onlineFileButtonPress(self, *args):
         res = json.loads(
             requests.post(self.onlineUrl, {'file_id': self.ids, 'file_type': self.type}).content.decode('utf-8'))
-        self.shareFileEntry.setvar('')
+        self.shareFileEntry.configure(textvariable=self.v1)
+        self.v1.set('')
         self.shareFileEntry.insert(0, res['data']['url'])
         tk.messagebox.showinfo('分享', '文件分享成功')
         pass

@@ -9,6 +9,12 @@
 使用Anaconda作为环境管理器。 python版本为3.7。
 
 ```shell
+conda create -n test python=3.7
+
+y
+
+conda activate test
+
 pip install minio 
 pip install flask
 pip install opencv-python
@@ -16,6 +22,7 @@ pip install pymysql
 pip install requests
 pip install pillow
 pip install matplotlib
+
 ```
 
 2. Minio
