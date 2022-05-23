@@ -1,5 +1,6 @@
 import datetime
 import json
+import urllib.parse
 
 import requests
 
@@ -141,13 +142,43 @@ def share(minioClient: tool.mio.minioClient, mysqlClient: tool.sql.sqlClient, at
 
 def online(minioClient: tool.mio.minioClient, attrs: dict):
     key = [i for i in attrs.keys()]
+    showType = ['txt', 'md', 'html', 'sql']
     if 'id' in key:
         url = minioClient.downloadFile(attrs['id'], attrs['type'])
-        if attrs['type'] != 'txt':
+        if attrs['type'] not in showType:
             f = open('backend/service/sample/online.html', 'r', encoding='utf-8')
             ht = f.read()
             f.close()
             ht = ht.format('下载链接', "<div><a href=\"{}\">文件下载</a></div>".format(url))
+            return ht
+        elif attrs['type'] == 'md':
+            f = open('backend/service/sample/online.html', 'r', encoding='utf-8')
+            ht = f.read()
+            f.close()
+
+            text = requests.get(url).content.decode(encoding='utf-8').split('\n')
+            t = []
+            for i in text:
+                print(i)
+                if i[0:2] == '# ':
+                    t.append(f'<p><h1>{i[2:]}<h1></p>')
+                elif i[0:3] == '## ':
+                    t.append(f'<p><h2>{i[3:]}<h2></p>')
+                elif i[0:4] == '### ':
+                    t.append(f'<p><h3>{i[4:]}<h3></p>')
+                elif len(i) == 0:
+                    t.append('<p></p>')
+                elif i[0] == '$' and i[-1] == '$':
+                    s = urllib.parse.quote(i[1:-1])
+                    u = '<img src="https://www.zhihu.com/equation?tex={}">'.format(s)
+                    t.append(f'<p>{u}</p>')
+                else:
+                    t.append('<p>{}</p>'.format(i))
+            t.append("<div><a href=\"{}\">文件下载</a></div>".format(url))
+            ts = ''
+            for i in t:
+                ts += i
+            ht = ht.format('文本读取器', ts)
             return ht
         else:
             f = open('backend/service/sample/online.html', 'r', encoding='utf-8')
@@ -155,7 +186,7 @@ def online(minioClient: tool.mio.minioClient, attrs: dict):
             f.close()
 
             text = requests.get(url).content.decode(encoding='utf-8').split('\n')
-            t = ['<p>{}<p>\n'.format(i) for i in text]
+            t = ['<p>{}</p>\n'.format(i) for i in text]
             ts = ''
             for i in t:
                 ts += i

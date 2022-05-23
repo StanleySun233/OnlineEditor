@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import json
 import logging
 import sys
@@ -227,3 +228,8 @@ def getNeteaseSongMessages(ids):
     """
 
     return resSheet
+
+
+def encodingPassowrd(s: str):
+    ss = s.encode('utf-8')
+    return hashlib.sha256(ss).hexdigest()

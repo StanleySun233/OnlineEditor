@@ -44,6 +44,16 @@ def userRegister():
     return res
 
 
+@app.route('/user/forget', methods=['POST', 'GET'])
+def userForget():
+    if request.method == 'POST':
+        data = request.values.to_dict()
+    else:
+        data = request.args.to_dict()
+    res = backend.service.userService.forget(mysqlClient, data)
+    return res
+
+
 @app.route('/user/getInfo', methods=['POST', 'GET'])
 def userSearch():
     if request.method == 'POST':

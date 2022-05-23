@@ -62,3 +62,17 @@ def getElemByAccount(sqlClient: tool.sql.sqlClient, attrs: dict):
     else:
         res['msg'] = '找不到该用户'
     return res
+
+
+def forget(sqlClient: tool.sql.sqlClient, attrs: dict):
+    res = {"code": 1, "data": None, "msg": "修改成功"}
+    account = attrs["account"]
+    password = attrs["password"]
+    data = sqlClient.isExist("user_info", {"user_account": account})
+
+    if data:
+        sqlClient.update("user_info", {"user_account": account}, {"user_password": password})
+    else:
+        res["code"] = 0
+        res["msg"] = "账号不存在"
+    return json.dumps(res, ensure_ascii=False)
