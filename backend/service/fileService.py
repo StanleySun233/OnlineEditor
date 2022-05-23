@@ -143,9 +143,16 @@ def share(minioClient: tool.mio.minioClient, mysqlClient: tool.sql.sqlClient, at
 def online(minioClient: tool.mio.minioClient, attrs: dict):
     key = [i for i in attrs.keys()]
     showType = ['txt', 'md', 'html', 'sql']
+    picType = ['png', 'jpg', 'jpeg']
     if 'id' in key:
         url = minioClient.downloadFile(attrs['id'], attrs['type'])
-        if attrs['type'] not in showType:
+        if attrs['type'] in picType:
+            f = open('backend/service/sample/online.html', 'r', encoding='utf-8')
+            ht = f.read()
+            f.close()
+            ht = ht.format('图片查看器', "<img src=\"{}\"".format(url))
+            return ht
+        elif attrs['type'] not in showType:
             f = open('backend/service/sample/online.html', 'r', encoding='utf-8')
             ht = f.read()
             f.close()
