@@ -179,6 +179,10 @@ def online(minioClient: tool.mio.minioClient, attrs: dict):
                     s = urllib.parse.quote(i[1:-1])
                     u = '<img src="https://www.zhihu.com/equation?tex={}">'.format(s)
                     t.append(f'<p>{u}</p>')
+                elif i[0] == '_' and i[-1] == '_':
+                    t.append(f'<p><i>{i[1:-1]}</i></p>')
+                elif i[0:2] == '**' and i[-2] + i[-1] == '**':
+                    t.append(f'<p><b>{i[2:-2]}</b></p>')
                 else:
                     t.append('<p>{}</p>'.format(i))
             t.append("<div><a href=\"{}\">文件下载</a></div>".format(url))

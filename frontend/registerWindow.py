@@ -38,6 +38,12 @@ class RegisterWindow(frontend.windowWidget.WindowWidget):
                                   'password': tool.fun.encodingPassowrd(pas),
                                   'tel': tel,
                                   'birth': bir}).content
+        if bir.count('-') != 2:
+            tk.messagebox.showwarning('注册', '日期格式不正确')
+            return
+        if len(tel) != 11:
+            tk.messagebox.showwarning('注册', '手机号格式不正确')
+            return
         res = json.loads(res)
         if res['code'] == 0:
             tk.messagebox.showwarning('注册', res['msg'])

@@ -15,7 +15,7 @@ import tool.fun
 class MainWindow(frontend.windowWidget.WindowWidget):
     def __init__(self, width, height, name, user_name, user_auth):
         super().__init__(width, height, name)
-        self.showType = ['txt', 'md', 'html', 'sql']
+        self.showType = ['txt', 'md', 'html', 'sql', 'csv']
         self.type = None
         self.picture = None
         self.data = None
@@ -42,7 +42,17 @@ class MainWindow(frontend.windowWidget.WindowWidget):
 
         self.textEditorFileId = self.makeLabel((320, 40, 800, 40))
 
-        self.textEditorText = self.makeText((320, 100, 800, 620))
+        self.textBButton = self.makeButton((320, 100, 40, 40), 'B', self.textBButtonPress)
+
+        self.textIButton = self.makeButton((360, 100, 40, 40), 'I', self.textIButtonPress)
+
+        self.text1Button = self.makeButton((400, 100, 40, 40), '1', self.text1ButtonPress)
+        self.text2Button = self.makeButton((440, 100, 40, 40), '2', self.text2ButtonPress)
+        self.text3Button = self.makeButton((480, 100, 40, 40), '3', self.text3ButtonPress)
+        self.textTButton = self.makeButton((520, 100, 40, 40), 'T', self.textTButtonPress)
+        self.textSButton = self.makeButton((520, 100, 40, 40), '$', self.textSButtonPress)
+
+        self.textEditorText = self.makeText((320, 180, 820, 520))
         self.textEditorLabel = self.makeLabel((320, 740, 800, 40), '编辑栏')
 
         self.uploadButton = self.makeButton((1140, 40, 120, 40), '上传文件', self.uploadButtonPress)
@@ -221,4 +231,83 @@ class MainWindow(frontend.windowWidget.WindowWidget):
         self.v1.set('')
         self.shareFileEntry.insert(0, res['data']['url'])
         tk.messagebox.showinfo('分享', '文件分享成功')
+        pass
+
+    def textBButtonPress(self, *args):
+        rep = self.textEditorText.selection_get().replace('**', '')
+        data = self.textEditorText.get('0.0', tk.END)
+        if '**{}**'.format(rep) in data:
+            data = data.replace('**{}**'.format(rep), rep)
+        else:
+            data = data.replace(rep, '**{}**'.format(rep))
+        self.textEditorText.delete('1.0', tk.END)
+        self.textEditorText.insert('end', data[:-1])
+        pass
+
+    def textIButtonPress(self, *args):
+        rep = self.textEditorText.selection_get().replace('_', '')
+        data = self.textEditorText.get('0.0', tk.END)
+        if '_{}_'.format(rep) in data:
+            data = data.replace('_{}_'.format(rep), rep)
+        else:
+            data = data.replace(rep, '_{}_'.format(rep))
+        self.textEditorText.delete('1.0', tk.END)
+        self.textEditorText.insert('end', data[:-1])
+        pass
+
+    def text1ButtonPress(self, *args):
+        rep = self.textEditorText.selection_get()
+        data = self.textEditorText.get('0.0', tk.END)
+        if "# " == rep[:2]:
+            data = data.replace(rep, rep[2:])
+        else:
+            data = data.replace(rep, '# {}'.format(rep))
+        self.textEditorText.delete('1.0', tk.END)
+        self.textEditorText.insert('end', data[:-1])
+        pass
+
+    def text2ButtonPress(self, *args):
+        rep = self.textEditorText.selection_get()
+        data = self.textEditorText.get('0.0', tk.END)
+        if "## " == rep[:3]:
+            data = data.replace(rep, rep[3:])
+        else:
+            data = data.replace(rep, '## {}'.format(rep))
+        self.textEditorText.delete('1.0', tk.END)
+        self.textEditorText.insert('end', data[:-1])
+        pass
+
+    def text3ButtonPress(self, *args):
+        rep = self.textEditorText.selection_get()
+        data = self.textEditorText.get('0.0', tk.END)
+        if "### " == rep[:4]:
+            data = data.replace(rep, rep[4:])
+        else:
+            data = data.replace(rep, '### {}'.format(rep))
+        self.textEditorText.delete('1.0', tk.END)
+        self.textEditorText.insert('end', data[:-1])
+        pass
+
+    def textTButtonPress(self, *args):
+        rep = self.textEditorText.selection_get()
+        data = self.textEditorText.get('0.0', tk.END)
+        if "# " == rep[:2]:
+            data = data.replace(rep, rep[2:])
+        elif "## " == rep[:3]:
+            data = data.replace(rep, rep[3:])
+        elif "### " == rep[:4]:
+            data = data.replace(rep, rep[4:])
+        self.textEditorText.delete('1.0', tk.END)
+        self.textEditorText.insert('end', data[:-1])
+        pass
+
+    def textSButtonPress(self, *args):
+        rep = self.textEditorText.selection_get().replace('$', '')
+        data = self.textEditorText.get('0.0', tk.END)
+        if '${}$'.format(rep) in data:
+            data = data.replace('${}$'.format(rep), rep)
+        else:
+            data = data.replace(rep, '${}$'.format(rep))
+        self.textEditorText.delete('1.0', tk.END)
+        self.textEditorText.insert('end', data[:-1])
         pass
