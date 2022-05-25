@@ -144,6 +144,9 @@ def online(minioClient: tool.mio.minioClient, attrs: dict):
     key = [i for i in attrs.keys()]
     showType = ['txt', 'md', 'html', 'sql']
     picType = ['png', 'jpg', 'jpeg']
+    reString = ['<p>([a-zA-Z0-9]+)</p>', '<h1>([a-zA-Z0-9]+)</h1>', '<h2>([a-zA-Z0-9]+)</h2>',
+                '<h3>([a-zA-Z0-9]+)</h3>', '$([a-zA-Z0-9()_+.!@#$%^&&*/]+)$', '<b>([a-zA-Z0-9]+)</b>', '<i>([a-zA-Z0-9'
+                                                                                                       ']+)</i>']
     if 'id' in key:
         url = minioClient.downloadFile(attrs['id'], attrs['type'])
         if attrs['type'] in picType:
@@ -166,7 +169,6 @@ def online(minioClient: tool.mio.minioClient, attrs: dict):
             text = requests.get(url).content.decode(encoding='utf-8').split('\n')
             t = []
             for i in text:
-                print(i)
                 if i[0:2] == '# ':
                     t.append(f'<p><h1>{i[2:]}<h1></p>')
                 elif i[0:3] == '## ':
@@ -208,3 +210,4 @@ def online(minioClient: tool.mio.minioClient, attrs: dict):
             {'msg': '分享成功',
              'data': {
                  'url': '{}/file/online?id={}&type={}'.format(config.httpUrl, attrs['file_id'], attrs['file_type'])}})
+    print(reString)
